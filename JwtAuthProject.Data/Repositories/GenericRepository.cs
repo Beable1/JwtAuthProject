@@ -11,8 +11,8 @@ namespace JwtAuthProject.Data.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        private readonly Context _context;
-        private readonly DbSet<TEntity> _dbSet;
+        protected readonly Context _context;
+        protected readonly DbSet<TEntity> _dbSet;
 
         public GenericRepository(Context context)
         {

@@ -16,13 +16,17 @@ namespace JwtAuthProject.Data
         {
         }
 
-        DbSet<Product> Products { get; set; }
-        DbSet<UserRefreshToken> UserRefreshToken { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<UserRefreshToken> UserRefreshToken { get; set; }
+        public DbSet<Chat> Chats { get; set; }
+
+        
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
+            
             base.OnModelCreating(builder);
         }
     }

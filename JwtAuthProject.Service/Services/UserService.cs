@@ -2,7 +2,9 @@
 using JwtAuthProject.Core.Dtos;
 using JwtAuthProject.Core.Models;
 using JwtAuthProject.Core.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SharedLibrary.Dtos;
 using System;
 using System.Collections.Generic;
@@ -57,6 +59,8 @@ namespace JwtAuthProject.Service.Services
 
         }
 
+      
+
         public async Task<Response<UserAppDto>> GetUserByNameAsync(string userName)
         {
             var user=await userManager.FindByNameAsync(userName);
@@ -67,6 +71,14 @@ namespace JwtAuthProject.Service.Services
             }
 
             return Response<UserAppDto>.Success(mapper.Map<UserAppDto>(user),200);   
+        }
+
+        public async Task<Response<List<UserAppDto>>> GetUsersAsync(string userName)
+        {
+            var users= await userManager.Users.Where(x=>x.UserName!= userName ).ToListAsync();
+            var usersDto= mapper.Map<List<UserAppDto>>(users);
+
+            return Response<List<UserAppDto>>.Success(usersDto, 200);
         }
     }
 }

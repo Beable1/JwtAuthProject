@@ -23,12 +23,14 @@ using SharedLibrary.Sevices;
 using FluentValidation.AspNetCore;
 using JwtAuthProject.Service.Validations;
 using FluentValidation;
+using JwtAuthProject.MyHub;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.UseCustomValidationResponse();
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserDtoValidator>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -43,6 +45,10 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
 
 builder.Services.AddScoped<JwtAuthProject.Core.Services.IAuthenticationService, JwtAuthProject.Service.Services.AuthenticationService>();
+
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -96,6 +102,16 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
+
+builder.Services.AddCors(options => options
+.AddDefaultPolicy(policy => policy.AllowAnyMethod().
+AllowAnyHeader().
+AllowCredentials().
+SetIsOriginAllowed(origin => true)
+
+));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -106,11 +122,17 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseEndpoints(endpoints =>
+    endpoints.MapHub<MyHub>("/myhub")
+);
 
 app.Run();

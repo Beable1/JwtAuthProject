@@ -16,6 +16,7 @@ namespace JwtAuthProject.Service.Mappers
         {
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<UserApp, UserAppDto>().ReverseMap();
+            CreateMap<Chat, ChatDto>().ReverseMap();
 
         }
     }

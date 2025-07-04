@@ -1,4 +1,5 @@
 ﻿using JwtAuthProject.Core.Dtos;
+using JwtAuthProject.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 using SharedLibrary.Dtos;
 using System;
@@ -17,6 +18,8 @@ namespace JwtAuthProject.Core.Services
 
         Task<Response<NoContentDto>> CreateUserRoles(string username);
         
+        Task<Response<List<UserAppDto>>> GetUsersAsync(string userName);
+
         
     }
 }

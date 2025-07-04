@@ -9,5 +9,7 @@ namespace JwtAuthProject.Core.Models
 {
     public class UserApp:IdentityUser
     {
+        public string Status { get; set; }
+        public string Avatar { get; set; }
     }
 }
